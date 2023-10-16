@@ -2,14 +2,16 @@
 
 define('BASE_PATH', dirname(__DIR__));
 
-require_once BASE_PATH.'/vendor/autoload.php';
+require_once BASE_PATH . '/vendor/autoload.php';
 
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Http\Request;
+use SimplePhpFramework\Routing\Router;
 
 $request = Request::createFromGlobals();
+$router = new Router();
+$kernel = new Kernel($router);
 
-$kernel = new Kernel();
 $response = $kernel->handle($request);
 
 $response->send();
