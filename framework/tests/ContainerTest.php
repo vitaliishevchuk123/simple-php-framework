@@ -25,4 +25,14 @@ class ContainerTest extends TestCase
 
         $container->add('no-class');
     }
+
+    public function test_has_method()
+    {
+        $container = new Container();
+
+        $container->add('service-class', ServiceClass::class);
+
+        $this->assertTrue($container->has('service-class'));
+        $this->assertFalse($container->has('no-class'));
+    }
 }
