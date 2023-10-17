@@ -4,6 +4,7 @@ namespace SimplePhpFramework\Tests;
 
 use PHPUnit\Framework\TestCase;
 use SimplePhpFramework\Container\Container;
+use SimplePhpFramework\Container\Exceptions\ContainerException;
 
 class ContainerTest extends TestCase
 {
@@ -14,5 +15,14 @@ class ContainerTest extends TestCase
         $container->add('service-class', ServiceClass::class);
 
         $this->assertInstanceOf(ServiceClass::class, $container->get('service-class'));
+    }
+
+    public function test_container_has_exception_ContainerException_if_add_wrong_service()
+    {
+        $container = new Container();
+
+        $this->expectException(ContainerException::class);
+
+        $container->add('no-class');
     }
 }
