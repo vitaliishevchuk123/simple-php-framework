@@ -6,14 +6,13 @@ require_once BASE_PATH . '/vendor/autoload.php';
 
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Http\Request;
-use SimplePhpFramework\Routing\Router;
 
 $request = Request::createFromGlobals();
 
+/** @var \League\Container\Container $container */
 $container = require BASE_PATH.'/config/services.php';
 
-$router = new Router();
-$kernel = new Kernel($router);
+$kernel = $container->get(Kernel::class);
 
 $response = $kernel->handle($request);
 
