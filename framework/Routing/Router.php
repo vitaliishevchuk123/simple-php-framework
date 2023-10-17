@@ -11,13 +11,19 @@ use function FastRoute\simpleDispatcher;
 
 class Router implements RouterInterface
 {
+    /**
+     * @throws RouteNotFoundException|MethodNotAllowedException
+     */
     public function dispatch(Request $request): array
     {
         [$handler, $vars] = $this->extractRouteInfo($request);
 
-        [$controller, $method] = $handler;
+        if (is_array($handler)) {
+            [$controller, $method] = $handler;
+            $handler = [new $controller, $method];
+        }
 
-        return [[new $controller, $method], $vars];
+        return [$handler, $vars];
     }
 
     /**
