@@ -35,4 +35,20 @@ class ContainerTest extends TestCase
         $this->assertTrue($container->has('service-class'));
         $this->assertFalse($container->has('no-class'));
     }
+
+    public function test_recursively_autowired()
+    {
+        $container = new Container();
+
+        $container->add('service-class', ServiceClass::class);
+
+        /** @var ServiceClass $somecode */
+        $somecode = $container->get('service-class');
+
+        $areaweb = $somecode->getSocialNetwork();
+
+        $this->assertInstanceOf(SocialNetworks::class, $somecode->getSocialNetwork());
+        $this->assertInstanceOf(YouTube::class, $areaweb->getYouTube());
+        $this->assertInstanceOf(Telegram::class, $areaweb->getTelegram());
+    }
 }
