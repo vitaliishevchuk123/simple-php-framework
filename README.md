@@ -17,3 +17,6 @@
 
 ## Dependency Injection Container 
 Для контейнера використали пакет `league/container`, який імплементує `psr/container` (PSR-11).
+
+## Dotenv Component 
+Використали пакет `symfony/dotenv`, який дає змогу зберігати всі змінні середовища в кореневому файлі проєкта `.env`. Symfony Dotenv аналізує файли `.env`, щоб зробити збережені в них змінні середовища доступними через $_SERVER або $_ENV.
