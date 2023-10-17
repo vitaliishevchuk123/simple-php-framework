@@ -12,7 +12,16 @@
       "SimplePhpFramework\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "SimplePhpFramework\\Tests\\": "tests"
+    }
+  },
   "require": {
-    "nikic/fast-route": "^1.3"
+    "nikic/fast-route": "^1.3",
+    "psr/container": "^2.0@dev"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^11.0@dev"
   }
 }

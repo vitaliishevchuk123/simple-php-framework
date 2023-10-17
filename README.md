@@ -14,3 +14,6 @@
 
 ## Router 
 В якості роутера використовується пакет `nikic/fast-route`
+
+## Dependency Injection Container 
+Для інтерфейсу контейнера використали пакет `psr/container` (PSR-11).
