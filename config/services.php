@@ -1,6 +1,7 @@
 <?php
 
 use League\Container\Argument\Literal\ArrayArgument;
+use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
 use SimplePhpFramework\Http\Kernel;
@@ -16,6 +17,8 @@ $routes = include BASE_PATH.'/routes/web.php';
 $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
+
+$container->add('APP_ENV', new StringArgument('local'));
 
 $container->add(RouterInterface::class, Router::class);
 

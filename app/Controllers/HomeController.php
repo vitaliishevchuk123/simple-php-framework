@@ -16,6 +16,7 @@ class HomeController
     {
         $content = '<h1>Hello, World!</h1><br>';
         $content .= "<a href=\"{$this->youTube->getChannelUrl()}\">YouTube</a>";
+        0/0;
 
         return new Response($content);
     }
