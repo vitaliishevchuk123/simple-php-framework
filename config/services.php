@@ -5,6 +5,7 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use SimplePhpFramework\Console\Commands\MigrateCommand;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Dbal\ConnectionFactory;
 use SimplePhpFramework\Http;
@@ -74,5 +75,9 @@ $container->add(Application::class)
 $container->add(Console\Kernel::class)
     ->addArgument($container)
     ->addArgument(Application::class);
+
+$container->add('console:migrate', MigrateCommand::class)
+    ->addArgument(Connection::class)
+    ->addArgument(new StringArgument(BASE_PATH.'/database/migrations'));
 
 return $container;
