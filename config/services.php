@@ -7,9 +7,11 @@ use League\Container\Container;
 use League\Container\ReflectionContainer;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Dbal\ConnectionFactory;
-use SimplePhpFramework\Http\Kernel;
+use SimplePhpFramework\Http;
+use SimplePhpFramework\Console;
 use SimplePhpFramework\Routing\Router;
 use SimplePhpFramework\Routing\RouterInterface;
+use SimplePhpFramework\Console\Application;
 use Symfony\Component\Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -36,6 +38,9 @@ $container = new Container();
 
 $container->delegate(new ReflectionContainer(true));
 
+$container->add('framework-commands-namespace', new StringArgument('SimplePhpFramework\\Console\\Commands\\'));
+$container->add('app-commands-namespace', new StringArgument('App\\Console\\Commands\\'));
+
 $container->add('APP_ENV', new StringArgument($appEnv));
 
 $container->add(RouterInterface::class, Router::class);
@@ -43,7 +48,7 @@ $container->add(RouterInterface::class, Router::class);
 $container->extend(RouterInterface::class)
     ->addMethodCall('registerRoutes', [new ArrayArgument($routes)]);
 
-$container->add(Kernel::class)
+$container->add(Http\Kernel::class)
     ->addArgument(RouterInterface::class)
     ->addArgument($container);
 
@@ -62,5 +67,12 @@ $container->add(ConnectionFactory::class)
 $container->addShared(Connection::class, function () use ($container): Connection {
     return $container->get(ConnectionFactory::class)->create();
 });
+
+$container->add(Application::class)
+    ->addArgument($container);
+
+$container->add(Console\Kernel::class)
+    ->addArgument($container)
+    ->addArgument(Application::class);
 
 return $container;

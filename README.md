@@ -1,28 +1,34 @@
 <h1 align="center" style="color: dodgerblue">Simple PHP framework</h1>
 За основу фреймворку візьмемо шаблон проектування Front Controller (фронт-контролер, єдина точка входу). Шаблон є спеціалізованою варіацією шаблону проєктування Посередник. Задачею фронт-контролера є надання єдиної точки входу для обробки усіх запитів та виклик відповідної поведінки в залежності від запиту.
 
-## Installation
+## <h2 style="color:#ba363f">Installation</h2>
 ``` 
     composer install
 ```
-## Debugging
+
+## <h2 style="color:#ba363f">About framework</h2>
+
+### Debugging
 Для налагодження використовується `symfony/var-dumper` компонент. Він забезпечує кращу функцію dump() або dd(), яку можна використовувати замість var_dump().
 
-## Request 
+### Request
 У PHP запит представлено деякими глобальними змінними ($_GET, $_POST, $_FILES, $_COOKIE, $_SESSION, ...), а відповідь генерується деякими функціями (echo, header(), setcookie(), ...).
 <br> Для оброки запиту клієнта напишемо свій власний клас Request - аналог `symfony/http-foundation`
 
-## Router 
+### Router
 В якості роутера використовується пакет `nikic/fast-route`
 
-## Dependency Injection Container 
+### Dependency Injection Container 
 Для контейнера використали пакет `league/container`, який імплементує `psr/container` (PSR-11).
 
-## Dotenv Component 
+### Dotenv Component 
 Використали пакет `symfony/dotenv`, який дає з
 
-## Twig
+### Twig
 В якості шаблонізатора обрано `twig/twig`. Twig зручний для розробників, дотримується принципів PHP і надає функції, корисні для середовищ шаблонів.
 
-## Doctrine DBAL
+### Doctrine DBAL
 В якості ORM обрано `doctrine/dbal`. Doctrine DBAL (Шар абстракції бази даних) - це шар абстракції, який працює над PDO і пропонує інтуїтивно зрозумілий та гнучкий API для комунікації з найбільш популярними реляційними базами даних.
+
+### Console commands
+Реалізовано кастомний функціонал запуску консольних команд `php console test --foo=boo`
