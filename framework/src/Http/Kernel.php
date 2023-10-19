@@ -12,8 +12,9 @@ class Kernel
 
     public function __construct(
         private RouterInterface $router,
-        private Container $container
-    ) {
+        private Container       $container
+    )
+    {
         $this->appEnv = $this->container->get('APP_ENV');
     }
 

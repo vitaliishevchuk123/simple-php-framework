@@ -7,10 +7,11 @@ require_once BASE_PATH . '/vendor/autoload.php';
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Http\Request;
 
-$request = Request::createFromGlobals();
-
 /** @var \League\Container\Container $container */
 $container = require BASE_PATH.'/config/services.php';
+
+$request = Request::createFromGlobals();
+$container->addShared(Request::class, $request);
 
 $kernel = $container->get(Kernel::class);
 

@@ -45,6 +45,7 @@ class MigrateCommand implements CommandInterface
 
 
 
+            $this->connection->setAutoCommit(false);
             $this->connection->beginTransaction();
 
             $schema = new Schema ();
@@ -76,6 +77,8 @@ class MigrateCommand implements CommandInterface
 
             throw $e;
         }
+
+        $this->connection->setAutoCommit(true);
 
         return 0;
     }

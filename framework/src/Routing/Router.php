@@ -22,8 +22,15 @@ class Router implements RouterInterface
             [$controllerId, $method] = $handler;
             $controller = $container->get($controllerId);
             $handler = [$controller, $method];
+            $reflectionClass = new \ReflectionClass($controller);
+            $method = $reflectionClass->getMethod($method);
+            $parameters = $this->processParams($method->getParameters(), $container);
+        } else {
+            $callbackFunction = new \ReflectionFunction($handler);
+            $parameters = $this->processParams($callbackFunction->getParameters(), $container);
         }
 
+        $vars = array_merge($parameters, $vars);
         return [$handler, $vars];
     }
 
@@ -58,5 +65,16 @@ class Router implements RouterInterface
                 $e->setStatusCode(404);
                 throw $e;
         }
+    }
+
+    private function processParams(array $params, Container $container): array
+    {
+        return array_merge(...(array_map(function (\ReflectionParameter $reflectionParameter) use ($container) {
+            $val[$reflectionParameter->getName()] = $reflectionParameter->isDefaultValueAvailable() ? $reflectionParameter->getDefaultValue() : null;
+            if (class_exists($reflectionParameter->getType()->getName())) {
+                $val[$reflectionParameter->getName()] = $container->get($reflectionParameter->getType()->getName());
+            }
+            return $val;
+        }, $params)));
     }
 }
