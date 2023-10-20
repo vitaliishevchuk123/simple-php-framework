@@ -1,0 +1,25 @@
+{% extends 'layouts/default.html.twig' %}
+
+{% block main %}
+    <div class="bg-body-tertiary p-5 rounded">
+        <form method="post" action="/register">
+            <div class="mb-3">
+                <label for="name" class="form-label">Ім'я</label>
+                <input name="name" value="Сільвестр Сталоне" placeholder="Сільвестр Сталоне" type="text" class="form-control" id="name">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input name="email" value="silvestr@gmail.com" placeholder="silvestr@gmail.com" type="text" class="form-control" id="email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input name="password" value="12345678" type="password" class="form-control" id="password">
+            </div>
+            <div class="mb-3">
+                <label for="password_confirmation" class="form-label">Підтвердження пароля</label>
+                <input name="password_confirmation" value="12345678" type="password" class="form-control" id="password_confirmation">
+            </div>
+            <button type="submit" class="btn btn-primary">Продовжити</button>
+        </form>
+    </div>
+{% endblock %}
