@@ -18,3 +18,5 @@ $kernel = $container->get(Kernel::class);
 $response = $kernel->handle($request);
 
 $response->send();
+
+$kernel->terminate($request, $response);

@@ -43,11 +43,6 @@ class MigrateCommand implements CommandInterface
                 return 0;
             }
 
-
-
-            $this->connection->setAutoCommit(false);
-            $this->connection->beginTransaction();
-
             $schema = new Schema ();
 
              foreach ($migrationsToApply as $migration) {
@@ -70,11 +65,7 @@ class MigrateCommand implements CommandInterface
                  $this->connection->executeQuery($sql);
              }
 
-             $this->connection->commit();
-
          } catch (\Throwable $e) {
-            $this->connection->rollBack();
-
             throw $e;
         }
 
