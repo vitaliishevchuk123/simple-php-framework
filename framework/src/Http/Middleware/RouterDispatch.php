@@ -10,9 +10,10 @@ use SimplePhpFramework\Routing\RouterInterface;
 class RouterDispatch implements MiddlewareInterface
 {
     public function __construct(
-        private RouterInterface $router,
+        private RouterInterface    $router,
         private ContainerInterface $container
-    ) {
+    )
+    {
     }
 
     public function process(Request $request, RequestHandlerInterface $handler): Response

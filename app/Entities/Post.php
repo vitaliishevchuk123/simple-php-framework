@@ -5,11 +5,12 @@ namespace App\Entities;
 class Post
 {
     public function __construct(
-        private ?int $id,
-        private string $title,
-        private string $body,
+        private ?int                $id,
+        private string              $title,
+        private string              $body,
         private ?\DateTimeImmutable $createdAt,
-    ) {
+    )
+    {
     }
 
     public function setId(?int $id): void
@@ -53,11 +54,12 @@ class Post
     }
 
     public static function create(
-        string $title,
-        string $body,
-        int $id = null,
+        string             $title,
+        string             $body,
+        int                $id = null,
         \DateTimeImmutable $createdAt = null
-    ): static {
+    ): static
+    {
         return new static($id, $title, $body, $createdAt ?? new \DateTimeImmutable());
     }
 }

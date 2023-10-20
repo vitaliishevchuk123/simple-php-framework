@@ -10,7 +10,8 @@ class HomeController extends AbstractController
 {
     public function __construct(
         private readonly YouTubeService $youTube,
-    ) {
+    )
+    {
     }
 
     public function index(): Response

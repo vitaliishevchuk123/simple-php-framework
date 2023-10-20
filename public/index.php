@@ -8,7 +8,7 @@ use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Http\Request;
 
 /** @var \League\Container\Container $container */
-$container = require BASE_PATH.'/config/services.php';
+$container = require BASE_PATH . '/config/services.php';
 
 $request = Request::createFromGlobals();
 $container->addShared(Request::class, $request);

@@ -16,7 +16,8 @@ class RequestHandler implements RequestHandlerInterface
 
     public function __construct(
         private ContainerInterface $container
-    ) {
+    )
+    {
     }
 
     public function handle(Request $request): Response

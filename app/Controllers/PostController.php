@@ -13,7 +13,8 @@ class PostController extends AbstractController
 {
     public function __construct(
         private PostService $service,
-    ) {
+    )
+    {
     }
 
     public function show(int $id): Response
@@ -33,8 +34,8 @@ class PostController extends AbstractController
     public function store(Request $request)
     {
         $post = Post::create(
-            $request->postData['title'],
-            $request->postData['body'],
+            $request->input('title'),
+            $request->input('body'),
         );
 
         $post = $this->service->save($post);

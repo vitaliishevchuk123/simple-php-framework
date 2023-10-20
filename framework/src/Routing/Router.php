@@ -71,8 +71,9 @@ class Router implements RouterInterface
     {
         return array_merge(...(array_map(function (\ReflectionParameter $reflectionParameter) use ($container) {
             $val[$reflectionParameter->getName()] = $reflectionParameter->isDefaultValueAvailable() ? $reflectionParameter->getDefaultValue() : null;
-            if (class_exists($reflectionParameter->getType()->getName())) {
-                $val[$reflectionParameter->getName()] = $container->get($reflectionParameter->getType()->getName());
+            $entity = $reflectionParameter->getType()->getName();
+            if (class_exists($entity) || interface_exists($entity)) {
+                $val[$reflectionParameter->getName()] = $container->get($entity);
             }
             return $val;
         }, $params)));

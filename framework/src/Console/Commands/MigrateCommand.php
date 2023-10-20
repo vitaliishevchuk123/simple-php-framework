@@ -45,27 +45,27 @@ class MigrateCommand implements CommandInterface
 
             $schema = new Schema ();
 
-             foreach ($migrationsToApply as $migration) {
-                 $migrationInstance = require $this->migrationsPath . "/$migration";
+            foreach ($migrationsToApply as $migration) {
+                $migrationInstance = require $this->migrationsPath . "/$migration";
 
-                 // 5. Створити SQL-запит для міграцій, які ще були виконані
+                // 5. Створити SQL-запит для міграцій, які ще були виконані
 
-                 $migrationInstance->up($schema);
+                $migrationInstance->up($schema);
 
-                 // 6. Додати міграцію до бази даних
+                // 6. Додати міграцію до бази даних
 
-                 $this->addMigration($migration);
-             }
+                $this->addMigration($migration);
+            }
 
-             // 7. Виконати SQL-запит
+            // 7. Виконати SQL-запит
 
-             $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
+            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
 
-             foreach ($sqlArray as $sql) {
-                 $this->connection->executeQuery($sql);
-             }
+            foreach ($sqlArray as $sql) {
+                $this->connection->executeQuery($sql);
+            }
 
-         } catch (\Throwable $e) {
+        } catch (\Throwable $e) {
             throw $e;
         }
 
@@ -80,23 +80,23 @@ class MigrateCommand implements CommandInterface
 
         if (!$schemaManager->tablesExist(self::MIGRATIONS_TABLE)) {
             $schema = new Schema ();
-             $table = $schema->createTable(self::MIGRATIONS_TABLE);
-             $table->addColumn('id', Types::INTEGER, [
-                 'unsigned' => true,
-                 'autoincrement' => true,
-             ]);
-             $table->addColumn('migration', Types::STRING);
-             $table->addColumn('created_at', Types::DATETIME_IMMUTABLE, [
-                 'default' => 'CURRENT_TIMESTAMP',
-             ]);
-             $table->setPrimaryKey(['id']);
+            $table = $schema->createTable(self::MIGRATIONS_TABLE);
+            $table->addColumn('id', Types::INTEGER, [
+                'unsigned' => true,
+                'autoincrement' => true,
+            ]);
+            $table->addColumn('migration', Types::STRING);
+            $table->addColumn('created_at', Types::DATETIME_IMMUTABLE, [
+                'default' => 'CURRENT_TIMESTAMP',
+            ]);
+            $table->setPrimaryKey(['id']);
 
-             $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
+            $sqlArray = $schema->toSql($this->connection->getDatabasePlatform());
 
-             $this->connection->executeQuery($sqlArray[0]);
+            $this->connection->executeQuery($sqlArray[0]);
 
-             echo 'Migrations table created' . PHP_EOL;
-         }
+            echo 'Migrations table created' . PHP_EOL;
+        }
     }
 
     private function getAppliedMigrations(): array

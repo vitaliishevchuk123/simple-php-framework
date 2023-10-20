@@ -3,8 +3,7 @@
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Types;
 
-return new class
-{
+return new class {
     public function up(Schema $schema): void
     {
         $table = $schema->createTable('users');

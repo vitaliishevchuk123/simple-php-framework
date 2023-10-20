@@ -1,10 +1,13 @@
 <?php
 
+use App\Services\UserService;
 use Doctrine\DBAL\Connection;
 use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use SimplePhpFramework\Authentication\SessionAuthentication;
+use SimplePhpFramework\Authentication\SessionAuthInterface;
 use SimplePhpFramework\Console;
 use SimplePhpFramework\Console\Application;
 use SimplePhpFramework\Console\Commands\MigrateCommand;
@@ -22,13 +25,13 @@ use SimplePhpFramework\Template\TwigFactory;
 use Symfony\Component\Dotenv\Dotenv;
 
 $dotenv = new Dotenv();
-$dotenv->load(BASE_PATH.'/.env');
+$dotenv->load(BASE_PATH . '/.env');
 
 // Application parameters
 
-$routes = include BASE_PATH.'/routes/web.php';
+$routes = include BASE_PATH . '/routes/web.php';
 $appEnv = $_ENV['APP_ENV'] ?? 'local';
-$viewsPath = BASE_PATH.'/views';
+$viewsPath = BASE_PATH . '/views';
 $connectionParams = [
     'dbname' => $_ENV['DB_DATABASE'],
     'user' => $_ENV['DB_USERNAME'],
@@ -96,12 +99,18 @@ $container->add(Console\Kernel::class)
 
 $container->add('console:migrate', MigrateCommand::class)
     ->addArgument(Connection::class)
-    ->addArgument(new StringArgument(BASE_PATH.'/database/migrations'));
+    ->addArgument(new StringArgument(BASE_PATH . '/database/migrations'));
 
 $container->add(RouterDispatch::class)
     ->addArguments([
         RouterInterface::class,
         $container,
+    ]);
+
+$container->add(SessionAuthInterface::class, SessionAuthentication::class)
+    ->addArguments([
+        UserService::class,
+        SessionInterface::class,
     ]);
 
 return $container;

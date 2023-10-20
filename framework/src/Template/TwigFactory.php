@@ -11,9 +11,10 @@ use Twig\TwigFunction;
 class TwigFactory
 {
     public function __construct(
-        private string $viewsPath,
+        private string           $viewsPath,
         private SessionInterface $session
-    ) {
+    )
+    {
     }
 
     public function create(): Environment

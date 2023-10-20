@@ -1,0 +1,27 @@
+{% extends 'layouts/default.html.twig' %}
+
+{% block main %}
+    <div class="bg-body-tertiary p-5 rounded">
+        {% if session().hasFlash('error') %}
+            <div class="alert alert-danger">
+                <ul class="m-0">
+                    {% for error in session().getFlash('error') %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+        <form method="post" action="/login">
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input name="email" value="silvestr@gmail.com" placeholder="maxim@areaweb.su" type="text"
+                       class="form-control" id="email">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Пароль</label>
+                <input name="password" value="12345678" type="password" class="form-control" id="password">
+            </div>
+            <button type="submit" class="btn btn-primary">Увійти</button>
+        </form>
+    </div>
+{% endblock %}

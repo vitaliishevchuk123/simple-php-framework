@@ -9,7 +9,8 @@ class ConnectionFactory
 {
     public function __construct(
         private readonly array $connectionParams
-    ) {
+    )
+    {
     }
 
     public function create(): Connection

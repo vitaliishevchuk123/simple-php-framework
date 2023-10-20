@@ -11,7 +11,7 @@ class Authenticate implements MiddlewareInterface
 
     public function process(Request $request, RequestHandlerInterface $handler): Response
     {
-        if (! $this->authenticated) {
+        if (!$this->authenticated) {
             return new Response('Authentication failed', 401);
         }
 

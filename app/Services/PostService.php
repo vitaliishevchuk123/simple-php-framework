@@ -10,7 +10,8 @@ class PostService
 {
     public function __construct(
         private Connection $connection
-    ) {
+    )
+    {
     }
 
     public function save(Post $post): Post
@@ -49,7 +50,7 @@ class PostService
 
         $post = $result->fetchAssociative();
 
-        if (! $post) {
+        if (!$post) {
             return null;
         }
 

@@ -8,7 +8,8 @@ class Application
 {
     public function __construct(
         private ContainerInterface $container
-    ) {
+    )
+    {
     }
 
     public function run(): int
@@ -20,7 +21,7 @@ class Application
 
         // 2. Возвращаем исключение, если имя команда не указана
 
-        if (! $commandName) {
+        if (!$commandName) {
             throw new ConsoleException('Invalid console command');
         }
 
