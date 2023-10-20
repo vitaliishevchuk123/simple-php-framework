@@ -4,7 +4,7 @@ namespace SimplePhpFramework\Routing;
 
 use FastRoute\Dispatcher;
 use FastRoute\RouteCollector;
-use League\Container\Container;
+use Psr\Container\ContainerInterface;
 use SimplePhpFramework\Http\Exceptions\MethodNotAllowedException;
 use SimplePhpFramework\Http\Exceptions\RouteNotFoundException;
 use SimplePhpFramework\Http\Request;
@@ -14,7 +14,7 @@ class Router implements RouterInterface
 {
     private array $routes;
 
-    public function dispatch(Request $request, Container $container): array
+    public function dispatch(Request $request, ContainerInterface $container): array
     {
         [$handler, $vars] = $this->extractRouteInfo($request);
 
@@ -67,7 +67,7 @@ class Router implements RouterInterface
         }
     }
 
-    private function processParams(array $params, Container $container): array
+    private function processParams(array $params, ContainerInterface $container): array
     {
         return array_merge(...(array_map(function (\ReflectionParameter $reflectionParameter) use ($container) {
             $val[$reflectionParameter->getName()] = $reflectionParameter->isDefaultValueAvailable() ? $reflectionParameter->getDefaultValue() : null;

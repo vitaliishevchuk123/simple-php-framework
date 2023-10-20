@@ -4,15 +4,15 @@ namespace SimplePhpFramework\Http;
 
 use League\Container\Container;
 use SimplePhpFramework\Http\Exceptions\HttpException;
-use SimplePhpFramework\Routing\RouterInterface;
+use SimplePhpFramework\Http\Middleware\RequestHandlerInterface;
 
 class Kernel
 {
     private string $appEnv = 'local';
 
     public function __construct(
-        private RouterInterface $router,
-        private Container       $container
+        private Container               $container,
+        private RequestHandlerInterface $requestHandler
     )
     {
         $this->appEnv = $this->container->get('APP_ENV');
@@ -21,9 +21,7 @@ class Kernel
     public function handle(Request $request): Response
     {
         try {
-            [$routeHandler, $vars] = $this->router->dispatch($request, $this->container);
-
-            $response = call_user_func_array($routeHandler, $vars);
+            $response = $this->requestHandler->handle($request);
         } catch (\Throwable $e) {
             $response = $this->createExceptionResponse($e);
         }

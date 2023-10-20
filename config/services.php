@@ -5,20 +5,21 @@ use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
 use League\Container\ReflectionContainer;
+use SimplePhpFramework\Console;
+use SimplePhpFramework\Console\Application;
 use SimplePhpFramework\Console\Commands\MigrateCommand;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Dbal\ConnectionFactory;
 use SimplePhpFramework\Http;
-use SimplePhpFramework\Console;
+use SimplePhpFramework\Http\Middleware\RequestHandler;
+use SimplePhpFramework\Http\Middleware\RequestHandlerInterface;
+use SimplePhpFramework\Http\Middleware\RouterDispatch;
 use SimplePhpFramework\Routing\Router;
 use SimplePhpFramework\Routing\RouterInterface;
-use SimplePhpFramework\Console\Application;
 use SimplePhpFramework\Session\Session;
 use SimplePhpFramework\Session\SessionInterface;
 use SimplePhpFramework\Template\TwigFactory;
 use Symfony\Component\Dotenv\Dotenv;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 
 $dotenv = new Dotenv();
 $dotenv->load(BASE_PATH.'/.env');
@@ -52,9 +53,14 @@ $container->add(RouterInterface::class, Router::class);
 $container->extend(RouterInterface::class)
     ->addMethodCall('registerRoutes', [new ArrayArgument($routes)]);
 
-$container->add(Http\Kernel::class)
-    ->addArgument(RouterInterface::class)
+$container->add(RequestHandlerInterface::class, RequestHandler::class)
     ->addArgument($container);
+
+$container->add(Http\Kernel::class)
+    ->addArguments([
+        $container,
+        RequestHandlerInterface::class,
+    ]);
 
 $container->addShared(SessionInterface::class, Session::class);
 
@@ -85,5 +91,11 @@ $container->add(Console\Kernel::class)
 $container->add('console:migrate', MigrateCommand::class)
     ->addArgument(Connection::class)
     ->addArgument(new StringArgument(BASE_PATH.'/database/migrations'));
+
+$container->add(RouterDispatch::class)
+    ->addArguments([
+        RouterInterface::class,
+        $container,
+    ]);
 
 return $container;

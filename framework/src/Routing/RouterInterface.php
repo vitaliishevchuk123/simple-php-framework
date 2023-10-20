@@ -2,12 +2,12 @@
 
 namespace SimplePhpFramework\Routing;
 
-use League\Container\Container;
+use Psr\Container\ContainerInterface;
 use SimplePhpFramework\Http\Request;
 
 interface RouterInterface
 {
-    public function dispatch(Request $request, Container $container);
+    public function dispatch(Request $request, ContainerInterface $container);
 
     public function registerRoutes(array $routes): void;
 }
