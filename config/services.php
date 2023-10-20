@@ -13,6 +13,9 @@ use SimplePhpFramework\Console;
 use SimplePhpFramework\Routing\Router;
 use SimplePhpFramework\Routing\RouterInterface;
 use SimplePhpFramework\Console\Application;
+use SimplePhpFramework\Session\Session;
+use SimplePhpFramework\Session\SessionInterface;
+use SimplePhpFramework\Template\TwigFactory;
 use Symfony\Component\Dotenv\Dotenv;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
@@ -53,11 +56,14 @@ $container->add(Http\Kernel::class)
     ->addArgument(RouterInterface::class)
     ->addArgument($container);
 
-$container->add('twig-loader', FilesystemLoader::class)
-    ->addArgument(new StringArgument($viewsPath));
+$container->addShared(SessionInterface::class, Session::class);
 
-$container->addShared('twig', Environment::class)
-    ->addArgument('twig-loader');
+$container->add('twig-factory', TwigFactory::class)
+    ->addArguments([new StringArgument($viewsPath), SessionInterface::class]);
+
+$container->addShared('twig', function () use ($container) {
+    return $container->get('twig-factory')->create();
+});
 
 $container->inflector(AbstractController::class)
     ->invokeMethod('setContainer', [$container]);
