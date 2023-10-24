@@ -11,20 +11,17 @@ use SimplePhpFramework\Http\Response;
 
 class PostController extends AbstractController
 {
-    public function __construct(
-        private PostService $service,
-    )
+    public function index(Request $request, PostService $service)
     {
+        $posts = $service->findAll();
+        return $this->render('posts.html.twig', [
+            'posts' => $posts,
+        ]);
     }
 
-    public function index(Request $request)
+    public function show(int $id, PostService $service): Response
     {
-        return $this->render('posts.html.twig');
-    }
-
-    public function show(int $id): Response
-    {
-        $post = $this->service->findOrFail($id);
+        $post = $service->findOrFail($id);
 
         return $this->render('post.html.twig', [
             'post' => $post,
@@ -36,14 +33,14 @@ class PostController extends AbstractController
         return $this->render('create_post.html.twig');
     }
 
-    public function store(Request $request)
+    public function store(Request $request, PostService $service)
     {
         $post = Post::create(
             $request->input('title'),
             $request->input('body'),
         );
 
-        $post = $this->service->save($post);
+        $post = $service->save($post);
 
         $request->getSession()->setFlash('success', 'Пост успішно створено!');
 

@@ -12,6 +12,8 @@ $request = Request::createFromGlobals();
 /** @var \League\Container\Container $container */
 $container = require BASE_PATH . '/config/services.php';
 
+$container->addShared(Request::class, $request);
+
 require_once BASE_PATH . '/bootstrap/bootstrap.php';
 
 $kernel = $container->get(Kernel::class);

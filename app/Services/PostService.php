@@ -59,6 +59,28 @@ class PostService
         );
     }
 
+    public function findAll(): array
+    {
+        $queryBuilder = $this->service->getConnection()->createQueryBuilder();
+
+        $result = $queryBuilder->select('*')
+            ->from('posts')
+            ->executeQuery();
+
+        $posts = [];
+
+        while ($post = $result->fetchAssociative()) {
+            $posts[] = Post::create(
+                title: $post['title'],
+                body: $post['body'],
+                id: $post['id'],
+                createdAt: new \DateTimeImmutable($post['created_at']),
+            );
+        }
+
+        return $posts;
+    }
+
     public function findOrFail(int $id): Post
     {
         $post = $this->find($id);

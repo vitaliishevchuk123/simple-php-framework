@@ -1,10 +1,32 @@
 {% extends 'layouts/default.html.twig' %}
 
 {% block main %}
-
+    {% for post in posts %}
+        <div class="blog-post">
+            <h2 class="display-5 link-body-emphasis mb-1">{{ post.getTitle() }}</h2>
+            <p class="blog-post-meta">{{ post.getCreatedAt().format('Y-m-d H:i:s') }}</a></p>
+            <p>
+                {% if post.getBody()|length > 200 %}
+                    {{ post.getBody()|slice(0, 400) ~ '...' }}
+                {% else %}
+                    {{ post.getBody() }}
+                {% endif %}
+            </p>
+            <a href="/posts/{{ post.getId() }}" class="icon-link text-decoration-none">
+                Перейти
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            {% if not loop.last %}
+                <hr>
+            {% endif %}
+        </div>
+    {% endfor %}
 {% endblock %}
 
 {% block style %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
     <style>
 
     </style>
