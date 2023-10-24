@@ -7,25 +7,12 @@ require_once BASE_PATH . '/vendor/autoload.php';
 use SimplePhpFramework\Http\Kernel;
 use SimplePhpFramework\Http\Request;
 
+$request = Request::createFromGlobals();
+
 /** @var \League\Container\Container $container */
 $container = require BASE_PATH . '/config/services.php';
 
-$eventDispatcher = $container->get(\SimplePhpFramework\Event\EventDispatcher::class);
-$eventDispatcher
-    ->addListener(
-        \SimplePhpFramework\Http\Events\ResponseEvent::class,
-        new \App\Listeners\InternalErrorListener()
-    )
-    ->addListener(
-        \SimplePhpFramework\Http\Events\ResponseEvent::class,
-        new \App\Listeners\ContentLengthListener()
-    )->addListener(
-        \SimplePhpFramework\Dbal\Event\EntityPersist::class,
-        new \App\Listeners\HandleEntityListener()
-    );
-
-$request = Request::createFromGlobals();
-$container->addShared(Request::class, $request);
+require_once BASE_PATH . '/bootstrap/bootstrap.php';
 
 $kernel = $container->get(Kernel::class);
 
