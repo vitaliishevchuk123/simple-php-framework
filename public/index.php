@@ -19,6 +19,9 @@ $eventDispatcher
     ->addListener(
         \SimplePhpFramework\Http\Events\ResponseEvent::class,
         new \App\Listeners\ContentLengthListener()
+    )->addListener(
+        \SimplePhpFramework\Dbal\Event\EntityPersist::class,
+        new \App\Listeners\HandleEntityListener()
     );
 
 $request = Request::createFromGlobals();

@@ -3,20 +3,19 @@
 namespace App\Services;
 
 use App\Entities\Post;
-use Doctrine\DBAL\Connection;
+use SimplePhpFramework\Dbal\EntityService;
 use SimplePhpFramework\Http\Exceptions\NotFoundException;
 
 class PostService
 {
     public function __construct(
-        private Connection $connection
-    )
-    {
+        private EntityService $service
+    ) {
     }
 
     public function save(Post $post): Post
     {
-        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder = $this->service->getConnection()->createQueryBuilder();
 
         $queryBuilder
             ->insert('posts')
@@ -31,16 +30,14 @@ class PostService
                 'created_at' => $post->getCreatedAt()->format('Y-m-d H:i:s'),
             ])->executeQuery();
 
-        $id = $this->connection->lastInsertId();
-
-        $post->setId($id);
+        $id = $this->service->save($post);
 
         return $post;
     }
 
     public function find(int $id): ?Post
     {
-        $queryBuilder = $this->connection->createQueryBuilder();
+        $queryBuilder = $this->service->getConnection()->createQueryBuilder();
 
         $result = $queryBuilder->select('*')
             ->from('posts')
@@ -50,7 +47,7 @@ class PostService
 
         $post = $result->fetchAssociative();
 
-        if (!$post) {
+        if (! $post) {
             return null;
         }
 
