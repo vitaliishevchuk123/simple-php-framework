@@ -17,6 +17,11 @@ class PostController extends AbstractController
     {
     }
 
+    public function index(Request $request)
+    {
+        return $this->render('posts.html.twig');
+    }
+
     public function show(int $id): Response
     {
         $post = $this->service->findOrFail($id);

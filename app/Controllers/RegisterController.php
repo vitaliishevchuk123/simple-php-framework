@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Forms\User\RegisterForm;
+use SimplePhpFramework\Authentication\SessionAuthInterface;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Http\RedirectResponse;
 use SimplePhpFramework\Http\Request;
@@ -15,7 +16,7 @@ class RegisterController extends AbstractController
         return $this->render('register.html.twig');
     }
 
-    public function register(Request $request, RegisterForm $form)
+    public function register(Request $request, RegisterForm $form, SessionAuthInterface $auth)
     {
         // 1. Створіть модель форми, яка:
         // Форму заінжектив в метод
@@ -47,6 +48,7 @@ class RegisterController extends AbstractController
         $request->getSession()->setFlash('success', "Користувач {$user->getEmail()} успішно зареєстрований");
 
         // 5. Увійти до системи під користувачем
+        $auth->login($user);
 
         // 6. Перенаправити на потрібну сторінку
 

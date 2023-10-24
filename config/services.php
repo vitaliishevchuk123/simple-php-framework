@@ -14,6 +14,7 @@ use SimplePhpFramework\Console\Commands\MigrateCommand;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Dbal\ConnectionFactory;
 use SimplePhpFramework\Http;
+use SimplePhpFramework\Http\Middleware\ExtractRouteInfo;
 use SimplePhpFramework\Http\Middleware\RequestHandler;
 use SimplePhpFramework\Http\Middleware\RequestHandlerInterface;
 use SimplePhpFramework\Http\Middleware\RouterDispatch;
@@ -59,9 +60,6 @@ $container->add('APP_ENV', new StringArgument($appEnv));
 
 $container->add(RouterInterface::class, Router::class);
 
-$container->extend(RouterInterface::class)
-    ->addMethodCall('registerRoutes', [new ArrayArgument($routes)]);
-
 $container->add(RequestHandlerInterface::class, RequestHandler::class)
     ->addArgument($container);
 
@@ -74,7 +72,7 @@ $container->add(Http\Kernel::class)
 $container->addShared(SessionInterface::class, Session::class);
 
 $container->add('twig-factory', TwigFactory::class)
-    ->addArguments([new StringArgument($viewsPath), SessionInterface::class]);
+    ->addArguments([new StringArgument($viewsPath), SessionInterface::class, SessionAuthInterface::class,]);
 
 $container->addShared('twig', function () use ($container) {
     return $container->get('twig-factory')->create();
@@ -112,5 +110,8 @@ $container->add(SessionAuthInterface::class, SessionAuthentication::class)
         UserService::class,
         SessionInterface::class,
     ]);
+
+$container->add(ExtractRouteInfo::class)
+    ->addArgument(new ArrayArgument($routes));
 
 return $container;

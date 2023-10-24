@@ -8,7 +8,7 @@ use SimplePhpFramework\Http\Request;
 use SimplePhpFramework\Http\Response;
 use SimplePhpFramework\Session\SessionInterface;
 
-class Authenticate implements MiddlewareInterface
+class Guest implements MiddlewareInterface
 {
     public function __construct(
         private SessionAuthInterface $auth,
@@ -20,10 +20,8 @@ class Authenticate implements MiddlewareInterface
     {
         $this->session->start();
 
-        if (! $this->auth->check()) {
-            $this->session->setFlash('error', 'To get started, you need to sign in to your account');
-
-            return new RedirectResponse('/login');
+        if ($this->auth->check()) {
+            return new RedirectResponse('/dashboard');
         }
 
         return $handler->handle($request);

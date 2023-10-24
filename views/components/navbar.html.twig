@@ -16,16 +16,21 @@
                     <a class="nav-link active" aria-current="page" href="/">Головна</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/blog">Блог</a>
+                    <a class="nav-link" href="/posts">Блог</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/posts/create">Добавити пост</a>
                 </li>
             </ul>
-            <form class="d-flex gap-2" role="search">
-                <a class="btn btn-primary" href="/login" type="submit">Вхід</a>
-                <a class="btn btn-outline-success" href="/register" type="submit">Реєстрація</a>
-            </form>
+            <div class="d-flex gap-2" role="search">
+                {% if auth().check() %}
+                    <form action="/logout" method="post">
+                        <button class="btn btn-outline-danger" href="/register" type="submit">Вихід</button>
+                    </form>
+                {% else %}
+                    <a class="btn btn-primary" href="/login">Вхід</a>
+                    <a class="btn btn-outline-success" href="/register">Реєстрація</a>
+                {% endif %}
         </div>
     </div>
 </nav>

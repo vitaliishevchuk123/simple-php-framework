@@ -15,9 +15,9 @@ class LoginController extends AbstractController
         return $this->render('login.html.twig');
     }
 
-    public function login(Request $request, SessionAuthInterface $sessionAuth): RedirectResponse
+    public function login(Request $request, SessionAuthInterface $auth): RedirectResponse
     {
-        $isAuth = $sessionAuth->authenticate(
+        $isAuth = $auth->authenticate(
             $request->input('email'),
             $request->input('password'),
         );
@@ -31,5 +31,12 @@ class LoginController extends AbstractController
         $request->getSession()->setFlash('success', 'Вхід успішно виконано!');
 
         return new RedirectResponse('/dashboard');
+    }
+
+    public function logout(SessionAuthInterface $auth): RedirectResponse
+    {
+        $auth->logout();
+
+        return new RedirectResponse('/login');
     }
 }
