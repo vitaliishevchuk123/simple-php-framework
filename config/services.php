@@ -13,6 +13,7 @@ use SimplePhpFramework\Console\Application;
 use SimplePhpFramework\Console\Commands\MigrateCommand;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Dbal\ConnectionFactory;
+use SimplePhpFramework\Event\EventDispatcher;
 use SimplePhpFramework\Http;
 use SimplePhpFramework\Http\Middleware\ExtractRouteInfo;
 use SimplePhpFramework\Http\Middleware\RequestHandler;
@@ -63,10 +64,13 @@ $container->add(RouterInterface::class, Router::class);
 $container->add(RequestHandlerInterface::class, RequestHandler::class)
     ->addArgument($container);
 
+$container->addShared(EventDispatcher::class);
+
 $container->add(Http\Kernel::class)
     ->addArguments([
         $container,
         RequestHandlerInterface::class,
+        EventDispatcher::class,
     ]);
 
 $container->addShared(SessionInterface::class, Session::class);

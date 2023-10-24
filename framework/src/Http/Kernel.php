@@ -3,6 +3,8 @@
 namespace SimplePhpFramework\Http;
 
 use League\Container\Container;
+use SimplePhpFramework\Event\EventDispatcher;
+use SimplePhpFramework\Http\Events\ResponseEvent;
 use SimplePhpFramework\Http\Exceptions\HttpException;
 use SimplePhpFramework\Http\Middleware\RequestHandlerInterface;
 
@@ -12,7 +14,8 @@ class Kernel
 
     public function __construct(
         private Container               $container,
-        private RequestHandlerInterface $requestHandler
+        private RequestHandlerInterface $requestHandler,
+        private readonly EventDispatcher $eventDispatcher
     )
     {
         $this->appEnv = $this->container->get('APP_ENV');
@@ -25,6 +28,9 @@ class Kernel
         } catch (\Throwable $e) {
             $response = $this->createExceptionResponse($e);
         }
+//         $response->setStatusCode(500);
+
+        $this->eventDispatcher->dispatch(new ResponseEvent($request, $response));
 
         return $response;
     }

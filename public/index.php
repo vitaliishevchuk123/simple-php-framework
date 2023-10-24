@@ -10,6 +10,17 @@ use SimplePhpFramework\Http\Request;
 /** @var \League\Container\Container $container */
 $container = require BASE_PATH . '/config/services.php';
 
+$eventDispatcher = $container->get(\SimplePhpFramework\Event\EventDispatcher::class);
+$eventDispatcher
+    ->addListener(
+        \SimplePhpFramework\Http\Events\ResponseEvent::class,
+        new \App\Listeners\InternalErrorListener()
+    )
+    ->addListener(
+        \SimplePhpFramework\Http\Events\ResponseEvent::class,
+        new \App\Listeners\ContentLengthListener()
+    );
+
 $request = Request::createFromGlobals();
 $container->addShared(Request::class, $request);
 
