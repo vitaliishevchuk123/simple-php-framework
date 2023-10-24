@@ -51,6 +51,11 @@ class Request
         return $this->postData[$key] ?? $default;
     }
 
+    public function get(string $key, mixed $default = null)
+    {
+        return $this->getParams[$key] ?? $default;
+    }
+
     public function getRouteHandler(): mixed
     {
         return $this->routeHandler;

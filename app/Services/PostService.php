@@ -10,7 +10,8 @@ class PostService
 {
     public function __construct(
         private EntityService $service
-    ) {
+    )
+    {
     }
 
     public function save(Post $post): Post
@@ -47,7 +48,7 @@ class PostService
 
         $post = $result->fetchAssociative();
 
-        if (! $post) {
+        if (!$post) {
             return null;
         }
 
@@ -79,6 +80,47 @@ class PostService
         }
 
         return $posts;
+    }
+
+    public function getPostsForPage(int $page, int $perPage): array
+    {
+        $queryBuilder = $this->service->getConnection()->createQueryBuilder();
+
+        $queryBuilder
+            ->select('*')
+            ->from('posts')
+            ->setFirstResult(($page - 1) * $perPage)
+            ->setMaxResults($perPage);
+
+        $result = $queryBuilder->executeQuery();
+        $posts = $result->fetchAllAssociative();
+
+        $formattedPosts = [];
+
+        foreach ($posts as $post) {
+            $formattedPosts[] = Post::create(
+                title: $post['title'],
+                body: $post['body'],
+                id: $post['id'],
+                createdAt: new \DateTimeImmutable($post['created_at'])
+            );
+        }
+
+        return $formattedPosts;
+    }
+
+    public function getTotalPostsCount(): int
+    {
+        $queryBuilder = $this->service->getConnection()->createQueryBuilder();
+
+        $queryBuilder
+            ->select('COUNT(id) as post_count')
+            ->from('posts');
+
+        $result = $queryBuilder->executeQuery();
+        $row = $result->fetchAssociative();
+
+        return (int)$row['post_count'];
     }
 
     public function findOrFail(int $id): Post
