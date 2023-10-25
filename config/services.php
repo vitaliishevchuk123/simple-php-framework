@@ -2,6 +2,7 @@
 
 use App\Services\UserService;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Logging\DebugStack;
 use League\Container\Argument\Literal\ArrayArgument;
 use League\Container\Argument\Literal\StringArgument;
 use League\Container\Container;
@@ -13,6 +14,7 @@ use SimplePhpFramework\Console\Application;
 use SimplePhpFramework\Console\Commands\MigrateCommand;
 use SimplePhpFramework\Controller\AbstractController;
 use SimplePhpFramework\Dbal\ConnectionFactory;
+use SimplePhpFramework\Dbal\Debuger;
 use SimplePhpFramework\Event\EventDispatcher;
 use SimplePhpFramework\Http;
 use SimplePhpFramework\Http\Middleware\ExtractRouteInfo;
@@ -92,6 +94,12 @@ $container->add(ConnectionFactory::class)
 $container->addShared(Connection::class, function () use ($container): Connection {
     return $container->get(ConnectionFactory::class)->create();
 });
+
+if ($_ENV['APP_ENV'] === 'local') {
+    $debugStack = new DebugStack();
+    $container->get(Connection::class)->getConfiguration()->setSQLLogger($debugStack);
+    $container->addShared(Debuger::class)->addArgument($debugStack);
+}
 
 $container->add(Application::class)
     ->addArgument($container);

@@ -31,7 +31,7 @@ class PostService
                 'created_at' => $post->getCreatedAt()->format('Y-m-d H:i:s'),
             ])->executeQuery();
 
-        $id = $this->service->save($post);
+        $this->service->save($post);
 
         return $post;
     }
@@ -89,6 +89,7 @@ class PostService
         $queryBuilder
             ->select('*')
             ->from('posts')
+            ->addOrderBy('created_at', 'desc')
             ->setFirstResult(($page - 1) * $perPage)
             ->setMaxResults($perPage);
 

@@ -3,6 +3,7 @@
 namespace SimplePhpFramework\Http;
 
 use League\Container\Container;
+use SimplePhpFramework\Dbal\Debuger;
 use SimplePhpFramework\Event\EventDispatcher;
 use SimplePhpFramework\Http\Events\ResponseEvent;
 use SimplePhpFramework\Http\Exceptions\HttpException;
@@ -10,11 +11,11 @@ use SimplePhpFramework\Http\Middleware\RequestHandlerInterface;
 
 class Kernel
 {
-    private string $appEnv = 'local';
+    private string $appEnv;
 
     public function __construct(
-        private Container               $container,
-        private RequestHandlerInterface $requestHandler,
+        private Container                $container,
+        private RequestHandlerInterface  $requestHandler,
         private readonly EventDispatcher $eventDispatcher
     )
     {
@@ -37,6 +38,10 @@ class Kernel
 
     public function terminate(Request $request, Response $response): void
     {
+        if ($this->appEnv == 'local') {
+//            $this->container->get(Debuger::class)->render();
+        }
+
         $request->getSession()?->clearFlash();
     }
 

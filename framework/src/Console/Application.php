@@ -14,33 +14,33 @@ class Application
 
     public function run(): int
     {
-        // 1. Получаем имя команды
+        // 1. Отримуємо ім'я команди
 
         $argv = $_SERVER['argv'];
         $commandName = $argv[1] ?? null;
 
-        // 2. Возвращаем исключение, если имя команда не указана
+        // 2. Повертаємо виняток, якщо ім'я команди не вказано
 
         if (!$commandName) {
             throw new ConsoleException('Invalid console command');
         }
 
-        // 3. Используем имя команды для получения объекта класса команды из контейнера
+        // 3. Використовуємо ім'я команди для отримання класу об'єкта команди з контейнера
 
         /** @var CommandInterface $command */
         $command = $this->container->get("console:$commandName");
 
-        // 4. Получаем опции и аргументы
+        // 4. Отримуємо опції та аргументи
 
-        $args = array_slice($argv, 2);
-        $options = $this->parseOptions($args);
+        $args = array_slice ($argv, 2);
+         $options = $this->parseOptions($args);
 
-        // 5. Выполнить команду, возвращая код статуса
+         // 5. Виконати команду, повертаючи код статусу
 
-        $status = $command->execute($options);
+         $status = $command->execute($options);
 
-        return $status;
-    }
+         return $status;
+     }
 
     private function parseOptions(array $args): array
     {
