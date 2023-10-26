@@ -13,17 +13,23 @@ class PostController extends AbstractController
 {
     public function index(Request $request, PostService $service)
     {
-        $page = $request->get('page', 1);
+        $currentPage = (int)$request->get('page', 1);
+        if ($currentPage < 1) {
+            return new RedirectResponse("/posts?page=1");
+        }
         $perPage = 10;
 
-        $posts = $service->getPostsForPage($page, $perPage);
+        $posts = $service->getPostsForPage($currentPage, $perPage);
         $totalPosts = $service->getTotalPostsCount();
         $totalPages = ceil($totalPosts / $perPage);
+        if ($currentPage > $totalPages) {
+            return new RedirectResponse("/posts?page=1");
+        }
 
         return $this->render('posts.html.twig', [
             'posts' => $posts,
             'totalPages' => $totalPages,
-            'currentPage' => $page,
+            'currentPage' => $currentPage,
         ]);
     }
 
